@@ -198,10 +198,10 @@ MedReferralRecordSchema.index({ clinicianId: 1, clientCode: 1 }, { unique: true 
 MedReferralRecordSchema.index({ clinicianId: 1, isArchived: 1 });
 
 // Pre-save: compute instrument totals ONLY. No verdicts, ever.
-MedReferralRecordSchema.pre('save', function (next) {
+// Synchronous hook (no `next`): Mongoose continues when it returns.
+MedReferralRecordSchema.pre('save', function () {
   (this.observations || []).forEach((o) => computeObservationTotals(o));
   (this.classModules || []).forEach((cm) => computeClassModuleTotals(cm));
-  next();
 });
 
 export const MedReferralRecord =
