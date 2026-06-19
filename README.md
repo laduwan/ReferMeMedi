@@ -24,8 +24,11 @@ npx vitest run src/__tests__/unit.test.js   # pure logic, no Mongo needed
 ## Deploy (Render, isolated)
 1. New GitHub repo (separate from CounselorReady).
 2. New Render **web service** from it.
-3. Env vars: `MONGODB_URI` (separate test DB / cluster), `FIELD_ENCRYPTION_KEY`, `STUB_CLINICIAN_ID`. Render injects `PORT`.
-4. Smoke from the Render shell: `node src/scripts/smokeTest.js`.
+3. Build command: `npm ci` (installs exactly from `package-lock.json`). If the service is configured from the dashboard rather than `render.yaml`, set this in **Settings → Build Command** — replacing any `yarn install`.
+4. Env vars: `MONGODB_URI` (separate test DB / cluster), `FIELD_ENCRYPTION_KEY`, `STUB_CLINICIAN_ID`. Render injects `PORT`.
+5. Smoke from the Render shell: `node src/scripts/smokeTest.js`.
+
+`render.yaml` in the repo root codifies the build command (`npm ci`) for blueprint-based deploys. Because `npm ci` fails the build whenever `package.json` and `package-lock.json` drift, always commit the two together.
 
 ## Design invariants (enforced in code)
 - **Capture and route, never assess.** No `dosageStatus` / `mgPerKg` / `medicationLoadFlag` — a test asserts their absence.

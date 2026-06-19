@@ -1,0 +1,17 @@
+# Render blueprint — keeps the build deterministic.
+# npm ci installs exactly from package-lock.json and fails the build if
+# package.json and package-lock.json fall out of sync (so always commit them together).
+services:
+  - type: web
+    name: med-referral
+    runtime: node
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: FIELD_ENCRYPTION_KEY
+        sync: false
+      - key: STUB_CLINICIAN_ID
+        sync: false
